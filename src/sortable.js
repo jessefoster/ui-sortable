@@ -184,8 +184,17 @@ angular.module('ui.sortable', [])
               // update that happens when moving between lists because then
               // the value will be overwritten with the old value
               if(!ui.item.sortable.received) {
-                ui.item.sortable.dropindex = ui.item.index();
                 var droptarget = ui.item.parent();
+                var dropIndex;
+
+                // Only consider sortable items when determining index. Ignore other html, for example
+                // placeholder text in a dropzone, otherwise item positioning is incorrect
+                if ( opts.items !== undefined ) {
+                  dropIndex = droptarget.children( opts.items ).index( ui.item );
+                }
+                else {
+                  dropIndex = ui.item.index();
+                }
                 ui.item.sortable.droptarget = droptarget;
 
                 var droptargetScope = getElementScope(ui.item.sortable._connectedSortables, droptarget);
